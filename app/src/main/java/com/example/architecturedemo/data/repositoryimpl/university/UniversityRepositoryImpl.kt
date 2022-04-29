@@ -1,6 +1,5 @@
 package com.example.architecturedemo.data.repositoryimpl.university
 
-import arrow.core.Either
 import com.example.architecturedemo.data.mapper.university.NetworkToUiUniversityMapper
 import com.example.architecturedemo.data.source.network.retrofit.university.UniversityService
 import com.example.architecturedemo.domain.model.university.UniversityUiModel
@@ -13,12 +12,12 @@ class UniversityRepositoryImpl @Inject constructor(
     private val networkToUiUniversityMapper: NetworkToUiUniversityMapper
 )
     : UniversityRepository {
-    override suspend fun getUniversityList(country: String): Either<Exception, List<UniversityUiModel>> {
+    override suspend fun getUniversityList(country: String): Result<List<UniversityUiModel>> {
         val result = try {
             val universityList = universityService.getUniversityList(country)
-            Either.Right(universityList)
+            Result.success(universityList)
         } catch (ex: Exception) {
-            Either.Left(ex)
+            Result.failure(ex)
         }
         return networkToUiUniversityMapper.mapFrom(result)
     }
