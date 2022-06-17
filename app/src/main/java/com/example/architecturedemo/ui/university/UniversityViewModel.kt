@@ -3,7 +3,10 @@ package com.example.architecturedemo.ui.university
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import arrow.core.getOrElse
+import com.example.architecturedemo.domain.model.university.UniversityUiModel
 import com.example.architecturedemo.domain.usecase.university.GetUniversityListUseCase
+import com.example.architecturedemo.ui.utils.base.recyclerview.BaseBindingRVModel
 import com.example.architecturedemo.ui.utils.base.viewmodel.BaseViewModel
 import com.example.architecturedemo.ui.utils.dispatcher.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,19 +31,26 @@ class UniversityViewModel @Inject constructor(
         MutableStateFlow(UniversityViewState())
     val viewState: StateFlow<UniversityViewState> = _viewState
 
-    fun getUniversityList() {
+    private fun getUniversityList() {
         viewModelScope.launch(dispatcherProvider.io) {
             val result = getUniversityListUseCase.getUniversityList("United States")
-            if (result.isSuccess) {
+            if (result.isRight()) {
                 Log.d("apple", "hai")
                 val res = result.getOrElse {
                     emptyList()
                 }
-
+                val viewableList = toViewableList(res)
+                _viewState.value.rvUniversityList.postValue(viewableList)
 
             } else {
                 Log.d("apple", "nai hai")
             }
+        }
+    }
+
+    fun toViewableList(list: List<UniversityUiModel>): List<BaseBindingRVModel> {
+        return list.map {
+            UniversityRVModel(it)
         }
     }
 }

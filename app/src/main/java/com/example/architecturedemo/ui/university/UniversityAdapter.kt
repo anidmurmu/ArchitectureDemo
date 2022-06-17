@@ -7,6 +7,7 @@ import com.example.architecturedemo.ui.utils.base.recyclerview.BaseBindingViewHo
 import com.example.architecturedemo.ui.utils.base.recyclerview.BaseViewHolderBindingFactory
 import androidx.databinding.ViewDataBinding
 import com.example.architecturedemo.BR
+import com.example.architecturedemo.domain.model.university.UniversityUiModel
 
 /**
  * This class contains a factory method
@@ -53,9 +54,9 @@ class UniversityViewHolder(
 /**
  * Wrapper class for item which contains model for it
  *
- * @property universityViewModel Model for item view
+ * @property universityUiModel Model for item view
  */
-class UniversityRVModel(val universityViewModel: UniversityViewModel) :
+class UniversityRVModel(val universityUiModel: UniversityUiModel) :
     BaseBindingRVModel {
 
     override fun getLayoutId(): Int {
@@ -63,6 +64,6 @@ class UniversityRVModel(val universityViewModel: UniversityViewModel) :
     }
 
     override fun getBindingPairs(): List<Pair<Int, Any>> {
-        return listOf(Pair(BR.uiModel, universityViewModel))
+        return listOf(Pair(BR.uiModel, universityUiModel))
     }
 }
